@@ -1,0 +1,14 @@
+linha 17 if(nums[i] == prev && !inClump)
+
+          (a)          (b)
+    nums[i] == prev | !inClump | Resultado
+t1         T            T           T 
+t2         T            F           F 
+t3         F            T           F 
+t4         F            F           F
+
+(a) t1, t3
+(b) t1, t2
+
+//a+resultado = inverso e b igual
+//b+resultado = inverso e a igual

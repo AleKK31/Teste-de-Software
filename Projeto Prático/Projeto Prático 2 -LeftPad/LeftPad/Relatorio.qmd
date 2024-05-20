@@ -1,0 +1,153 @@
+---
+title: "Relatório: Trabalho Prático de Teste Baseado em Especificação e Teste Estrutural"
+subtitle: "Método para preenchimento à esquerda de uma string usando outra string."
+author: "Alexandre Borges Baccarini Junior"
+toc: true
+toc-title: Sumário
+number-sections: false
+highlight-style: pygments
+format: 
+  html:
+    embed-resources: true
+
+engine: knitr
+---
+
+```{css}
+#| echo: false
+ul,
+p {
+  text-align: justify !important
+}
+```
+
+
+## Introdução
+
+Este documento descreve o processo ao usar teste baseado em especificação e teste estrutural para derivar casos de teste para o método ``leftPad()``. Ele deve preencher uma string à esquerda usando outra string. O objetivo deste relatório é fornecer uma análise detalhada do teste do método, incluindo casos de teste derivados, cobertura de código e eventuais erros encontrados durante o processo.
+
+## Passo 2 - Explorar o funcionamento do programa
+
+Meu processo foi o seguinte:
+
+- Vamos ver o programa trabalhando em um caso de sucesso. Vou passar a string ``str`` como "dtr", ``size`` sendo igual a 6 e ``padStr`` como "esq";
+  - <(``str``="dtr", ``size``= 6, ``padStr``="esq"), (["esqdrt"])>
+- Em seguida, vamos ver o que acontece se o preenchimento à esquerda tiver um caracter e o size tiver mais espaço. Vou passar a string ``str`` como "dtr", ``size`` sendo igual a 6 e ``padStr`` como ".";
+  - <(``str``="drt", ``size``= 6, ``padStr``="."), (["...drt"])>
+- Vou repetir a ideia do segundo teste, mas o preenchimento à esquerda tiver caracteres a mais que o espaço do size. Vou passar a string ``str`` como "def", ``size`` sendo igual a 5 e ``padStr`` como "abc";;
+  - <(``str``="def", ``size``= 5, ``padStr``="abc"), (["abdef"])>
+
+## Passo 3 - Identificar as partições
+
+### Para cada entrada individualmente
+
+#### Parâmetro ``str``: 
+  
+``str`` pode ser qualquer string. A especificação menciona os casos nulos e vazios; eu os teria testado de qualquer maneira, porque eles são sempre bons casos de teste excepcionais.
+
+- ``str`` com valor ``null``;
+- ``str`` vazia;
+- ``len(str) >= 0``.
+
+#### Parâmetro ``size``: 
+  
+``size`` pode ser qualquer número inteiro. A especificação diz que é o tamanho máximo da string preenchida.
+
+- ``size == 0``;
+- ``size < 0``;
+- ``size > 0``.
+
+#### Parâmetro ``padStr``: 
+  
+``padStr`` pode ser qualquer string. A especificação menciona os casos nulos e vazios; eu os teria testado de qualquer maneira, porque eles são sempre bons casos de teste excepcionais. Dado que esta é uma string (que é basicamente uma lista de caracteres), também vou testar o que acontece se a string tiver comprimento 1.
+
+- ``padStr`` com valor ``null``;
+- ``padStr`` vazia;
+- ``len(padStr) >= 0``.
+
+### Para combinações de entradas
+
+As combinações de entradas serão todas as possíveis combinações dos valores identificados para cada parâmetro individualmente: 
+
+- ``str`` é null, ``size`` é um número inteiro, ``padStr`` é null;
+- ``str`` é null, ``size`` é um número inteiro, ``padStr`` é uma string vazia;
+- ``str`` é null, ``size`` é um número inteiro, ``padStr`` tem um string;
+- ``str`` é null, ``size`` maior que 0, ``padStr`` com diferentes valores;
+- ``str`` vazio, ``size`` igual a 0 ou maior que 0, ``padStr`` com diferentes valores;
+- ``str`` com comprimento igual a 1, ``size`` igual a 0 ou maior que 0, ``padStr`` com diferentes valores;
+- ``str`` com comprimento maior que 1, ``size`` igual a 0 ou maior que 0, ``padStr`` com diferentes valores.
+
+### Para saídas esperadas
+
+O método retorna uma string. Posso ver um conjunto de possíveis saídas diferentes:
+
+- Null se houver alguma string com esse valor;
+- A string normal se não houver o preenchimento;
+- Uma string com o preenchimento.
+
+
+## Passo 4 - Identificar os valores limite
+
+Erros relacionados a valores nos limites de domínio de entrada são frequentes em sistemas de software. Ao definirmos partições, estabelecemos valores que separam as partições. É importante realizar testes sempre que um valor limite for estabelecido para verificar a resposta do programa.
+
+No caso de  ``leftPad()``, o limite só acontece quando entramos com o parâmetro ``size`` para definir o tamanho do preenchimento, além de quando a string é nula ou vazia.
+Neste caso, sempre que identificamos um limite, criamos dois testes para ele, um para cada lado do limite (*in point* e *out point*). Para o limite "sem substring de saída/uma substring de saída", os dois testes são os seguintes:
+
+- ``size`` contém espaço para o ``padStr``
+- ``size`` não contém espaço para o ``padStr``
+
+
+## Passo 5 - Derivar os casos de teste
+
+Casos de teste para análise de como funciona o programa:
+
+- T01: ``str == null``
+- T02: ``str`` vazia 
+- T03: ``padStr == null``
+- T04: ``padStr`` vazia 
+- T05: ``len(str) >= 1`` e ``len(padStr) >= 1``
+- T06: ``size < 0``
+- T07: ``size > 1``
+- T08: ``size == 0``
+- T09: ``size == len(str)``
+- T10: ``size == len(padStr)``
+- T11: ``size == len(str) + len(padStr)``
+- T12: ``size`` com um valor "extremo"`
+- T13: ``padStr`` com caracteres especiais
+
+## Passo 6 - Automatizar os casos de teste usando JUnit
+
+Nenhuma dificuldade foi encontrada.
+
+
+## Passo 7 - Aumentar a suíte de testes por meio de experiência e criatividade
+
+Ao revisitar os testes, pesnsei em testar ``padStr`` com \n.
+
+- (T14) ``padStr`` com valor de \n
+
+
+## Implementando Teste Estrutural
+
+## Passo 3 - Cobertura de código produzido pelo Jacoco
+
+Tive problemas ao realizar obter as informações de cobertura de código produzido pelo Jacoco.
+
+## Passo 4 - casos de teste criados a partir da utilização do critério MC/DC
+
+Tabela verdade do critério de cobertura MC/DC
+
+- if(padStr == null || padStr.isEmpty())
+- Genericamente, é A || B
+
+![Tabela verdade](mcdc.jpg){width="=100%" height="100%"}
+
+N+1 = 3
+
+## Cobertura de código produzido pelo Jacoco após adicionados os testes criados usando MC/DC
+
+-
+
+## Erros e defeitos encontrados no código
+
+-

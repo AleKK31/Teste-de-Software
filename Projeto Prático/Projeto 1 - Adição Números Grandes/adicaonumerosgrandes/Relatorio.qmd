@@ -1,0 +1,149 @@
+---
+title: "Relatório: Trabalho Prático de Teste Baseado em Especificação"
+subtitle: "Método para adição de números inteiros muito grandes"
+author: "Alexandre Borges Baccarini Júnior"
+toc: true
+toc-title: Sumário
+number-sections: false
+highlight-style: pygments
+format: 
+  html:
+    embed-resources: true
+
+engine: knitr
+---
+
+```{css}
+#| echo: false
+ul,
+p {
+  text-align: justify !important
+}
+```
+
+
+## Introdução
+
+Este documento descreve o processo usado pelo progrmador ao usar teste baseado em especificação para derivar casos de teste para o método ``add()``.
+
+
+## Passo 2 - Explorar o funcionamento do programa
+
+Meu processo foi o seguinte:
+
+- Quero ver o programa trabalhando em um caso de sucesso. Utilizarei um dois números com apenas um dígito, ``left`` sendo 1 e ``right`` sendo 1;
+  - <(``left``= 1, ``right``= 1), ([2])>
+- Em seguida, vamos ver quantos númeors consigo somar. Vou passar dois números com mais de um dígito para as variáveis ``left`` e ``right``;
+  - <(``left``= 15, ``right``= 10), ([25])>
+  - <(``left``= 500, ``right``= 250), ([750])>
+  - <(``left``= 1111111111, ``right``= 5555555555), ([6666666666])>
+- Vou testar um último caso com quantidade diferentes de dígitos para cada uma das variáveis;
+  - <(``left``= 2374, ``right``= 10000), ([12374])>
+
+Os testes até agora foram todos bem sucedidos!
+
+
+## Passo 3 - Identificar as partições
+
+### Para cada entrada individualmente
+
+#### Parâmetro ``left``: 
+  
+``left`` é uma variável que representa um número inteiro grande qualquer, por meio de uma lista de dígitos, ele será o número que estará à esquerda da operação de soma. Sua especificação de requisito diz que deve ser um número entre 0 e 9 e menciona o fato dele ser nulo ou vazio; testarei nulo e vazio, pois são casos de testes especiais.
+
+  - ``left`` com valor ``null``;
+  - ``left`` vazia;
+  - ``left`` com valores entre 0 e 9.
+
+#### Parâmetro ``right``: 
+
+``right`` é uma variável que representa um número inteiro grande qualquer, por meio de uma lista de dígitos, ele será o número que estará à direita da operação de soma. Sua especificação de requisito diz que deve ser um número entre 0 e 9 e menciona o fato dele ser nulo ou vazio; testarei nulo e vazio, pois são casos de testes excepcionais.
+
+  - ``right`` com valor ``null``;
+  - ``right`` vazia;
+  - ``right`` com valores entre 0 e 9.
+
+### Para combinações de entradas
+
+As duas variáveis possuem uma ligação, já que serão somadas e vão gerar um resultado. 
+
+  - ``right`` e ``left`` são listas válidas;
+  - ``right`` e ``left`` são listas nulas;
+  - ``right`` e ``left`` são listas vazias;
+  - ``right`` ou ``left`` é nula e a outra não;
+  - ``right`` ou ``left`` é vazia e a outra não.
+
+### Para saídas esperadas
+
+A sáida deve ser uma lista de números que representa a soma dos números das duas listas. Podendo ser:
+
+  - lista com valor ``null``;
+  - lista vazia, no caso, igual 0;
+  - lista com um dígito;
+  - lista com diversos dígito.
+
+
+## Passo 4 - Identificar os valores limite
+
+Erros relacionados a valores nos limites de domínio de entrada são frequentes em sistemas de software. Ao definirmos partições, estabelecemos valores que separam as partições. É importante realizar testes sempre que um valor limite for estabelecido para verificar a resposta do programa.
+
+Nesse caso, os limites que encontrei são os seguintes:
+
+  - ``right`` e ``left`` possuem o valor máximo de um dígito é 9;
+  - ``right`` e ``left`` possuem o valor máximo de um dígito é maior que 9.
+
+  - ``right`` e ``left`` são listas com a mesma quantidade de dígitos;
+  - ``right`` e ``left`` são listas com diferentes quantidades de dígitos.
+
+  - ``right`` e ``left`` são listas com dígitos positivos.
+  - ``right`` e/ou ``left`` são listas com dígitos negativos.
+
+
+## Passo 5 -  Derivar os casos de teste
+
+Com base nas partições e nos valores limites identificados, vou derivar os casos de teste nos seguintes:
+
+- Casos de teste de números de dígitos variados
+  - T01: ``list(left) == 1`` e ``list(right) == 1`` 
+  - T02: ``list(left) == 2`` e ``list(right) == 2``.
+  - T03: ``list(left) == 3`` e ``list(right) == 3``
+  - T04: ``list(left) == 10`` e ``list(right) == 10``
+  - T05: ``list(left) == 1000000`` e ``list(right) == 1000000``
+  - T06: ``list(left) != list(right)``
+
+- Casos de teste de excessão
+  - T07: ``list(left) == null`` e ``list(right) == null``
+  - T08: ``list(left)`` vazia e ``list(right)`` vazia
+  - T09: ``list(left) == null`` e ``list(right)`` vazia
+
+- Casos de teste de listas mistas
+  - T10: ``list(left) == null`` e ``list(right) > 1``
+  - T11: ``list(left)`` vazia e ``list(right) > 1``
+
+- Casos de teste de valor limite
+  - T12: ``leftDigit > 9`` e ``rightDigit > 9``
+  - T13: ``leftDigit < 0`` e ``rightDigit < 0``
+
+<!-- 
+T01: Testar a soma de dois números de um único dígito.
+T02: Testar a soma de dois números de dois dígitos.
+T03: Testar a soma de dois números de três dígitos.
+T04: Testar a soma de dois números de dez dígitos.
+T05: Testar a soma de dois números muito grandes.
+T06: Testar a soma de números com dígitos diferentes.
+T07: Testar a soma com ambas as listas nulas.
+T08: Testar a soma com ambas as listas vazias.
+T09: Testar a soma com uma lista nula e uma lista vazia.
+T10: Testar a soma com uma lista nula e outra não.
+T11: Testar a soma com uma lista vazia e outra não.
+T12: Testar a soma com uma lista com dígitos maior que 9.
+T13: Testar a soma com uma lista com dígitos negativos.
+-->
+
+## Passo 6 - Automatizar os casos de teste usando JUnit
+
+Nenhuma dificuldade foi enctrada, o mais "desafiador" foi criar o teste ``largeLists()``
+
+## Passo 7 - Aumentar a suíte de testes por meio de experiência e criatividade
+
+Revisei os testes, mas não notei algum caso novo que poderia ser criado.
